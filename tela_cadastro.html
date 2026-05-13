@@ -1,167 +1,304 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro | Praça Inteligente</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://i.ibb.co/Nz68BSC/PRA-A-INTELIGENTE-LOGO.png">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-        }
+  <title>Cadastro | Praça Inteligente</title>
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08);
-            border: 1px solid #f1f5f9;
-        }
+  <!-- Favicon -->
+  <link rel="icon" type="image/png"
+    href="https://i.ibb.co/Nz68BSC/PRA-A-INTELIGENTE-LOGO.png">
 
-        .custom-input {
-            transition: all 0.3s ease;
-            border: 1.5px solid #e2e8f0;
-            outline: none;
-        }
+  <!-- Animate.css -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-        .custom-input:focus {
-            border-color: #0095ff;
-            box-shadow: 0 0 0 4px rgba(0, 149, 255, 0.1);
-        }
+  <style>
 
-        .btn-gradient {
-            background-color: #0095ff;
-            color: white;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
 
-        .btn-gradient:hover {
-            background-color: #007ce2;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(0, 149, 255, 0.3);
-        }
+    body{
+      min-height:100vh;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background:
+      radial-gradient(circle at top left, #1b6ca8 0%, transparent 30%),
+      radial-gradient(circle at bottom right, #0f4c75 0%, transparent 30%),
+      linear-gradient(135deg, #071e3d, #0f4c75);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:40px 20px;
+      color:white;
+      overflow-x:hidden;
+    }
 
-        .logo-img {
-            max-width: 170px;
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-        }
+    /* FUNDO DECORATIVO */
 
-        /* Mensagem de sucesso personalizada */
-        #success-message {
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #22c55e;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            z-index: 1000;
-            animation: slideIn 0.5s ease-out;
-        }
+    body::before{
+      content:"";
+      position:absolute;
+      width:450px;
+      height:450px;
+      background:rgba(255,211,105,0.08);
+      border-radius:50%;
+      top:-120px;
+      left:-120px;
+      filter:blur(40px);
+    }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
-        }
-    </style>
+    body::after{
+      content:"";
+      position:absolute;
+      width:350px;
+      height:350px;
+      background:rgba(255,255,255,0.05);
+      border-radius:50%;
+      bottom:-100px;
+      right:-100px;
+      filter:blur(40px);
+    }
+
+    /* CARD */
+
+    .cadastro-container{
+      position:relative;
+      z-index:2;
+      width:100%;
+      max-width:450px;
+      padding:45px 35px;
+      border-radius:28px;
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(14px);
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:
+      0 20px 60px rgba(0,0,0,0.35);
+      animation:fadeInUp 1s ease;
+    }
+
+    /* LOGO */
+
+    .logo{
+      text-align:center;
+      margin-bottom:25px;
+    }
+
+    .logo img{
+      width:80px;
+      margin-bottom:15px;
+    }
+
+    .logo h1{
+      font-size:2rem;
+      color:#ffd369;
+    }
+
+    .logo p{
+      margin-top:10px;
+      color:rgba(255,255,255,0.8);
+      line-height:1.7;
+    }
+
+    /* FORM */
+
+    form{
+      margin-top:30px;
+    }
+
+    .input-group{
+      margin-bottom:20px;
+    }
+
+    .input-group label{
+      display:block;
+      margin-bottom:10px;
+      font-weight:600;
+      color:#ffd369;
+    }
+
+    .input-group input{
+      width:100%;
+      padding:16px 18px;
+      border:none;
+      outline:none;
+      border-radius:14px;
+      background:rgba(255,255,255,0.07);
+      border:1px solid rgba(255,255,255,0.08);
+      color:white;
+      font-size:1rem;
+      transition:0.3s ease;
+    }
+
+    .input-group input::placeholder{
+      color:rgba(255,255,255,0.45);
+    }
+
+    .input-group input:focus{
+      border-color:#ffd369;
+      background:rgba(255,255,255,0.1);
+      box-shadow:
+      0 0 0 4px rgba(255,211,105,0.12);
+    }
+
+    /* SENHA */
+
+    .senha-container{
+      position:relative;
+    }
+
+    .senha-container input{
+      padding-right:55px;
+    }
+
+    .toggle-password{
+      position:absolute;
+      right:18px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      font-size:1.1rem;
+      color:rgba(255,255,255,0.7);
+      transition:0.3s ease;
+    }
+
+    .toggle-password:hover{
+      color:#ffd369;
+    }
+
+    /* BOTÃO */
+
+    .btn{
+      width:100%;
+      margin-top:10px;
+      padding:18px;
+      border:none;
+      border-radius:16px;
+      background:
+      linear-gradient(135deg,#ffd369,#ffb703);
+      color:#111;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.4s ease;
+      box-shadow:
+      0 10px 30px rgba(255,211,105,0.25);
+    }
+
+    .btn:hover{
+      transform:translateY(-5px);
+      box-shadow:
+      0 15px 40px rgba(255,211,105,0.4);
+    }
+
+    /* TEXTO */
+
+    .footer-text{
+      margin-top:25px;
+      text-align:center;
+      color:rgba(255,255,255,0.7);
+      line-height:1.7;
+      font-size:0.95rem;
+    }
+
+    .footer-text a{
+      color:#ffd369;
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    .footer-text a:hover{
+      text-decoration:underline;
+    }
+
+    /* RESPONSIVO */
+
+    @media(max-width:600px){
+
+      .cadastro-container{
+        padding:35px 25px;
+      }
+
+      .logo h1{
+        font-size:1.8rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-    <div id="success-message">Dados salvos com sucesso no banco!</div>
-
-    <div class="max-w-md w-full glass-card rounded-[40px] p-10 md:p-12">
-        
-        <!-- Logo -->
-        <div class="flex justify-center mb-8">
-            <img src="https://i.ibb.co/Nz68BSC/PRA-A-INTELIGENTE-LOGO.png" alt="PRAÇA INTELIGENTE LOGO" class="logo-img">
-        </div>
-
-        <h2 class="text-center text-gray-400 text-xs font-semibold mb-10 tracking-widest uppercase">Criar Nova Conta</h2>
-
-        <!-- Formulário de Cadastro -->
-        <form id="cadastro-form" class="space-y-6">
-            
-            <!-- Campo Nome -->
-            <div class="space-y-2">
-                <label for="nome" class="flex items-center gap-2 text-gray-700 font-medium ml-3 text-sm">
-                    <i class="far fa-user"></i>
-                    <span>Nome Completo:</span>
-                </label>
-                <input 
-                    type="text" 
-                    id="nome" 
-                    name="nome"
-                    class="w-full custom-input h-12 rounded-full px-6 text-gray-700 bg-white"
-                    placeholder="Seu nome completo"
-                    required
-                >
-            </div>
-
-            <!-- Campo Email -->
-            <div class="space-y-2">
-                <label for="email" class="flex items-center gap-2 text-gray-700 font-medium ml-3 text-sm">
-                    <i class="far fa-envelope"></i>
-                    <span>Email:</span>
-                </label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email"
-                    class="w-full custom-input h-12 rounded-full px-6 text-gray-700 bg-white"
-                    placeholder="exemplo@email.com"
-                    required
-                >
-            </div>
-
-            <!-- Campo Senha -->
-            <div class="space-y-2">
-                <label for="password" class="flex items-center gap-2 text-gray-700 font-medium ml-3 text-sm">
-                    <i class="fas fa-key" style="transform: rotate(-45deg);"></i>
-                    <span>Senha:</span>
-                </label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password"
-                    class="w-full custom-input h-12 rounded-full px-6 text-gray-700 bg-white"
-                    placeholder="••••••••"
-                    required
-                >
-            </div>
-
-            <!-- Botão Concluir -->
-            <div class="pt-4">
-                <button 
-                    type="submit" 
-                    id="btn-concluir"
-                    class="w-full h-14 btn-gradient text-white font-bold text-lg rounded-full shadow-lg"
-                >
-                    Concluir
-                </button>
-            </div>
-            
-            <p class="text-center text-gray-500 text-sm mt-6">
-                Já tem uma conta? <a href="iniciar_sessao.html" class="text-blue-500 font-medium hover:underline">Iniciar sessão</a>
-            </p>
-        </form>
+  <div class="cadastro-container animate__animated animate__fadeInUp">
+    <div class="logo">
+      <img src="https://i.ibb.co/Nz68BSC/PRA-A-INTELIGENTE-LOGO.png"
+        alt="Logo Praça Inteligente">
+      <h1>Praça Inteligente</h1>
+      <p>
+        Faça seu cadastro e participe da construção
+        de cidades mais inteligentes, sustentáveis
+        e conectadas.
+      </p>
     </div>
+
+    <form>
+      <div class="input-group">
+        <label>Nome Completo</label>
+
+        <input type="text"
+          placeholder="Digite seu nome completo">
+      </div>
+
+      <div class="input-group">
+        <label>E-mail</label>
+        <input type="email"
+          placeholder="Digite seu e-mail">
+      </div>
+
+      <div class="input-group">
+        <label>CPF</label>
+        <input type="text"
+          placeholder="000.000.000-00">
+      </div>
+
+      <div class="input-group">
+        <label>Senha</label>
+        <div class="senha-container">
+          <input 
+            type="password"
+            id="senha"
+            placeholder="Crie sua senha">
+          <span class="toggle-password" onclick="mostrarSenha()">
+            👁
+          </span>
+        </div>
+      </div>
+
+      <button class="btn">
+        Criar Cadastro
+      </button>
+
+    </form>
+    <div class="footer-text">
+      Já possui uma conta?
+      <a href="login.html">
+        Entrar agora
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function mostrarSenha(){
+      const senhaInput = document.getElementById("senha");
+      if(senhaInput.type === "password"){
+        senhaInput.type = "text";
+
+      } else {
+        senhaInput.type = "password";
+      }
+    }
+  </script>
 </body>
 </html>
