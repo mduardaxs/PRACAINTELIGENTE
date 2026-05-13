@@ -1,258 +1,472 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Usuário | Praça Inteligente</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/Nz68BSC/PRA-A-INTELIGENTE-LOGO.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Painel do Cidadão - Praça Inteligente</title>
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        .sidebar-item { transition: all 0.2s ease; cursor: pointer; border-radius: 12px; }
-        .sidebar-item:hover { background-color: rgba(0, 149, 255, 0.1); color: #0095ff; }
-        .active-link { background-color: rgba(0, 149, 255, 0.1); color: #0095ff; font-weight: 600; border-right: 4px solid #0095ff; }
-        .glass-effect { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        :root {
+            --primary-gold: #ffd369;
+            --sidebar-width: 260px;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --input-bg: rgba(15, 76, 117, 0.4); /* Fundo mais sólido para inputs */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(circle at top left, #1b6ca8 0%, transparent 30%),
+                radial-gradient(circle at bottom right, #0f4c75 0%, transparent 30%),
+                linear-gradient(135deg, #071e3d, #0f4c75);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        /* SIDEBAR */
+        aside {
+            width: var(--sidebar-width);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 20px;
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            font-weight: 800;
+            color: var(--primary-gold);
+            font-size: 1.4rem;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--glass-bg);
+            color: var(--primary-gold);
+            transform: translateX(5px);
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        main {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 40px;
+            max-width: 1400px;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        /* DASHBOARD ESPECÍFICO */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        /* FORMULÁRIOS CORRIGIDOS */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--primary-gold);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: #ffffff; /* Texto sempre branco */
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            -webkit-appearance: none; /* Remove estilos padrão do mobile */
+        }
+
+        /* Estilo para as opções do select (que costumam ficar brancas) */
+        select option {
+            background-color: #071e3d;
+            color: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-gold);
+            background: rgba(15, 76, 117, 0.7);
+            box-shadow: 0 0 10px rgba(255, 211, 105, 0.1);
+        }
+
+        /* Correção para o "tudo branco" ao selecionar ou foco automático do navegador */
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.3);
+            border-color: transparent;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #ffd369, #ffb703);
+            color: #111;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.4s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 211, 105, 0.3);
+        }
+
+        /* MAPA */
+        .map-wrapper {
+            height: 600px;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* TABELA DE HISTÓRICO */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            color: var(--primary-gold);
+            border-bottom: 2px solid var(--glass-border);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-pendente { background: rgba(255, 211, 105, 0.2); color: #ffd369; }
+
+        @media (max-width: 1024px) {
+            aside { width: 80px; padding: 40px 10px; }
+            .sidebar-brand span, .nav-item span { display: none; }
+            main { margin-left: 80px; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
-<body class="flex min-h-screen">
 
-    <aside class="w-72 bg-white border-r border-gray-200 hidden md:flex flex-col">
-        <div class="p-8">
-            <img src="https://i.ibb.co/Nz68BSC/PRA-A-INTELIGENTE-LOGO.png" alt="Logo" class="w-36 mx-auto">
-        </div>
-        
-        <nav class="flex-1 px-4 space-y-2 mt-4">
-            <div onclick="showSection('inicio')" class="sidebar-item flex items-center gap-3 p-3 text-gray-600 active-link" id="nav-inicio">
-                <i class="fas fa-home w-5"></i> Início
+<body>
+
+    <aside>
+        <a href="#" class="sidebar-brand">
+            <img src="PRAÇA INTELIGENTE LOGO.png" alt="logo" style="width: 45px; height: 45px;">
+            <span>Praça Inteligente</span>
+        </a>
+        <nav class="nav-menu">
+            <div class="nav-item active" onclick="showSection('inicio', this)">
+                <img src="house-solid.png" alt="casa" style="width: 35px; height: 35px;">
+                <span>Início</span>
             </div>
-            <div onclick="showSection('conquistas')" class="sidebar-item flex items-center gap-3 p-3 text-gray-600" id="nav-conquistas">
-                <i class="fas fa-trophy w-5"></i> Conquistas
+            <div class="nav-item" onclick="showSection('historico', this)">
+                <img src="book-solid.png" alt="historico" style="width: 35px; height: 35px;">
+                <span>Histórico</span>
             </div>
-            <div onclick="showSection('mapa')" class="sidebar-item flex items-center gap-3 p-3 text-gray-600" id="nav-mapa">
-                <i class="fas fa-map-marked-alt w-5"></i> Mapa
+            <div class="nav-item" onclick="showSection('mapa', this)">
+                <img src="location-yellow-dot-solid.png" alt="localização" style="width: 35px; height: 35px;">
+                <span>Mapa Urbano</span>
             </div>
-            <div onclick="showSection('ocorrencia')" class="sidebar-item flex items-center gap-3 p-3 text-gray-600" id="nav-ocorrencia">
-                <i class="fas fa-plus-circle w-5"></i> Registrar Ocorrência
+            <div class="nav-item" onclick="showSection('registrar', this)">
+                <img src="pen-solid.png" alt="registro" style="width: 35px; height: 35px;">
+                <span>Registrar Ocorrência</span>
             </div>
         </nav>
-
-        <div class="p-6 border-t border-gray-100">
-            <div class="bg-blue-50 p-5 rounded-[24px] text-center">
-                <p class="text-[10px] text-blue-600 font-bold uppercase tracking-widest">Nível Atual</p>
-                <p class="text-lg font-bold text-gray-800">Guardião Urbano</p>
-                <div class="w-full bg-gray-200 h-2 rounded-full mt-3">
-                    <div class="bg-blue-500 h-2 rounded-full" style="width: 65%"></div>
-                </div>
-                <p class="text-[10px] text-gray-400 mt-2">350 XP para o próximo nível</p>
-            </div>
-        </div>
     </aside>
 
-    <main class="flex-1 p-8 overflow-y-auto">
-        
-        <section id="section-inicio" class="space-y-8">
-            <header>
-                <h1 class="text-3xl font-bold text-gray-800">Seu Dashboard</h1>
-                <p class="text-gray-500">Resumo das suas contribuições e impacto real.</p>
-            </header>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100 flex flex-col items-center">
-                    <h3 class="font-bold text-gray-800 mb-6 text-sm">Status das Ocorrências</h3>
-                    <div class="w-full h-[200px]"><canvas id="statusChart"></canvas></div>
-                </div>
-                <div class="lg:col-span-2 bg-white p-6 rounded-[32px] shadow-sm border border-gray-100">
-                    <h3 class="font-bold text-gray-800 mb-6 text-sm">Total Geral por Mês</h3>
-                    <div class="w-full h-[200px]"><canvas id="barChart"></canvas></div>
-                </div>
+    <main>
+        <!-- SEÇÃO INÍCIO (DASHBOARD) -->
+        <section id="inicio" class="view-section active animate__animated animate__fadeIn">
+            <div class="welcome-section" style="margin-bottom: 30px;">
+                <h1 style="font-size: 2.2rem;">Olá, <span style="color: var(--primary-gold);">Cidadão</span></h1>
+                <p style="opacity: 0.7;">Confira o panorama dos espaços urbanos hoje.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
-                <div class="bg-white p-4 rounded-2xl border border-gray-100">
-                    <p class="text-gray-400 text-[10px] font-bold uppercase">Total</p>
-                    <h3 class="text-xl font-bold text-gray-800">24</h3>
+            <div class="dashboard-grid">
+                <div class="glass-card">
+                    <h3 style="margin-bottom: 20px; color: var(--primary-gold);">Frequência de Uso</h3>
+                    <div style="height: 300px;">
+                        <canvas id="usageChart"></canvas>
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border-l-4 border-l-green-500 shadow-sm">
-                    <p class="text-green-600 text-[10px] font-bold uppercase">Resolvidas</p>
-                    <h3 class="text-xl font-bold text-gray-800">18</h3>
-                </div>
-                <div class="bg-white p-4 rounded-2xl border-l-4 border-l-yellow-500 shadow-sm">
-                    <p class="text-yellow-600 text-[10px] font-bold uppercase">Em Análise</p>
-                    <h3 class="text-xl font-bold text-gray-800">4</h3>
-                </div>
-                <div class="bg-white p-4 rounded-2xl border-l-4 border-l-red-500 shadow-sm">
-                    <p class="text-red-600 text-[10px] font-bold uppercase">Pendentes</p>
-                    <h3 class="text-xl font-bold text-gray-800">2</h3>
+                <div class="glass-card" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
+                    <span style="font-size: 3rem;">✨</span>
+                    <h3>Suas Contribuições</h3>
+                    <p style="font-size: 3rem; font-weight: 800; margin: 10px 0;">08</p>
+                    <p style="opacity: 0.6; font-size: 0.85rem;">Melhorias sugeridas no último mês.</p>
                 </div>
             </div>
         </section>
 
-        <section id="section-conquistas" class="hidden space-y-8">
-            <h1 class="text-3xl font-bold text-gray-800">Suas Conquistas</h1>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-8 rounded-[40px] text-center border-2 border-yellow-400 shadow-lg relative overflow-hidden">
-                    <div class="bg-yellow-400 text-white text-[10px] font-bold px-4 py-1 absolute top-4 -right-4 rotate-45 w-32">COLECIONADO</div>
-                    <i class="fas fa-bolt text-6xl text-yellow-400 mb-6"></i>
-                    <h4 class="font-bold text-xl">Sentinela Ágil</h4>
-                    <p class="text-sm text-gray-500 mt-2">5 ocorrências registradas em um único mês.</p>
-                </div>
-                <div class="bg-white p-8 rounded-[40px] text-center border border-gray-100 opacity-40 grayscale">
-                    <i class="fas fa-medal text-6xl text-gray-300 mb-6"></i>
-                    <h4 class="font-bold text-xl">Mestre das Quadras</h4>
-                    <p class="text-sm text-gray-400 mt-2">Reportar 10 problemas em quadras esportivas.</p>
-                </div>
+        <!-- SEÇÃO HISTÓRICO -->
+        <section id="historico" class="view-section animate__animated animate__fadeIn">
+            <h2 style="margin-bottom: 25px;">Histórico de <span style="color: var(--primary-gold);">Ocorrências</span></h2>
+            <div class="glass-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Protocolo</th>
+                            <th>Data</th>
+                            <th>Local</th>
+                            <th>Problema</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historicoTableBody">
+                        <tr>
+                            <td>#PI-7721</td>
+                            <td>12/10/2025</td>
+                            <td>Praça da Árvore</td>
+                            <td>Iluminação Quebrada</td>
+                            <td><span class="status-badge badge-pendente">Pendente</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
 
-        <section id="section-mapa" class="hidden h-full">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">Mapa Interativo</h1>
-            <div class="w-full h-[550px] rounded-[40px] overflow-hidden shadow-2xl border-8 border-white">
-                <iframe src="https://www.google.com/maps/embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <!-- SEÇÃO MAPA URBANO -->
+        <section id="mapa" class="view-section animate__animated animate__fadeIn">
+            <h2 style="margin-bottom: 25px;">Mapa <span style="color: var(--primary-gold);">Urbano</span></h2>
+            <div class="map-wrapper">
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    scrolling="no" 
+                    marginheight="0" 
+                    marginwidth="0" 
+                    src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=pt-BR&amp;q=S%C3%A3o%20Paulo%20Pra%C3%A7as+(Pra%C3%A7a%20Inteligente)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+                </iframe>
             </div>
         </section>
 
-        <section id="section-ocorrencia" class="hidden max-w-4xl mx-auto pb-10">
-            <div class="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-gray-100">
-                <div class="text-center mb-10">
-                    <h1 class="text-3xl font-bold text-gray-800">Nova Ocorrência</h1>
-                    <p class="text-gray-500">Gere um novo chamado para manutenção pública.</p>
-                </div>
-
-                <form id="formOcorrencia" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">ID da Ocorrência</label>
-                            <input type="text" id="inputID" name="id_ocorrencia" readonly class="w-full h-14 bg-gray-100 border-none rounded-2xl px-6 text-gray-500 cursor-not-allowed outline-none font-mono">
+        <!-- SEÇÃO REGISTRAR OCORRÊNCIA -->
+        <section id="registrar" class="view-section animate__animated animate__fadeIn">
+            <h2 style="margin-bottom: 25px;">Nova <span style="color: var(--primary-gold);">Ocorrência</span></h2>
+            <div class="glass-card" style="max-width: 800px; margin: auto;">
+                <form id="ocorrenciaForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Protocolo</label>
+                            <input type="text" id="formProtocolo" disabled>
                         </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">Status</label>
-                            <input type="text" name="status" value="Realizado" readonly class="w-full h-14 bg-green-50 border-none rounded-2xl px-6 text-green-600 font-bold cursor-not-allowed outline-none">
+                        <div class="form-group">
+                            <label>Data</label>
+                            <input type="text" id="formData" disabled>
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">Nome de Usuário</label>
-                            <input type="text" name="usuario" placeholder="Seu nome ou @id" required class="w-full h-14 bg-gray-50 border-none rounded-2xl px-6 focus:ring-2 focus:ring-blue-400 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">Data</label>
-                            <input type="text" id="inputData" name="data" readonly class="w-full h-14 bg-gray-100 border-none rounded-2xl px-6 text-gray-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">Hora</label>
-                            <input type="text" id="inputHora" name="hora" readonly class="w-full h-14 bg-gray-100 border-none rounded-2xl px-6 text-gray-500 outline-none">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <input type="text" value="Pendente" disabled>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">Nome da Praça</label>
-                            <input type="text" name="nome_praca" placeholder="Ex: Praça São Paulo" required class="w-full h-14 bg-gray-50 border-none rounded-2xl px-6 focus:ring-2 focus:ring-blue-400 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">Tipo de Espaço</label>
-                            <select name="tipo_espaco" class="w-full h-14 bg-gray-50 border-none rounded-2xl px-6 focus:ring-2 focus:ring-blue-400 outline-none appearance-none">
-                                <option value="praça">Praça</option>
-                                <option value="quadra">Quadra</option>
-                                <option value="playground">Playground</option>
-                                <option value="academia">Academia ao Ar Livre</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label>Espaço Público</label>
+                        <select id="formEspaco" required>
+                            <option value="">Selecione o local...</option>
+                            <option>Praça Pública</option>
+                            <option>Playground</option>
+                            <option>Quadra Poliesportiva</option>
+                            <option>Academia ao Ar Livre</option>
+                        </select>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">Localização/Endereço</label>
-                        <input type="text" name="localizacao" placeholder="Rua, número ou ponto de referência" required class="w-full h-14 bg-gray-50 border-none rounded-2xl px-6 focus:ring-2 focus:ring-blue-400 outline-none">
+                    <div class="form-group">
+                        <label>Tipo de Problema</label>
+                        <select id="formTipo" required>
+                            <option value="">O que aconteceu?</option>
+                            <option>Iluminação</option>
+                            <option>Manutenção de Equipamento</option>
+                            <option>Limpeza / Lixo</option>
+                            <option>Segurança</option>
+                            <option>Paisagismo</option>
+                        </select>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 ml-2 mb-2">Descrição Detalhada</label>
-                        <textarea name="descricao" rows="4" placeholder="Explique o que precisa de reparo..." required class="w-full p-6 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-400 outline-none"></textarea>
+                    <div class="form-group">
+                        <label>Endereço / Referência</label>
+                        <input type="text" id="formEndereco" placeholder="Ex: Av. Paulista, altura do nº 1000" required>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200">
-                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Foto do Local 1</label>
-                            <input type="file" class="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700">
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200">
-                            <label class="block text-xs font-bold text-gray-400 uppercase mb-2">Foto do Local 2</label>
-                            <input type="file" class="text-xs file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700">
-                        </div>
+                    <div class="form-group">
+                        <label>Relato Detalhado</label>
+                        <textarea id="formRelato" rows="4" placeholder="Descreva o problema com o máximo de detalhes possível..." required></textarea>
                     </div>
 
-                    <button type="submit" class="w-full h-16 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2 transform hover:scale-[1.01]">
-                        <i class="fas fa-paper-plane"></i> Realizar Ocorrência
-                    </button>
+                    <button type="submit" class="btn-submit">Enviar Registro</button>
                 </form>
             </div>
         </section>
-
     </main>
 
     <script>
-        // Função para trocar abas e preencher formulário
-        function showSection(id) {
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active-link'));
+        function showSection(sectionId, element) {
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             
-            document.getElementById('section-' + id).classList.remove('hidden');
-            document.getElementById('nav-' + id).classList.add('active-link');
+            document.getElementById(sectionId).classList.add('active');
+            element.classList.add('active');
 
-            if(id === 'ocorrencia') prepararFormulario();
+            if(sectionId === 'registrar') {
+                preencherCamposAutomaticos();
+            }
         }
 
-        // Preenche campos automáticos (ID, Data, Hora)
-        function prepararFormulario() {
-            const id = "PR-" + Math.floor(1000 + Math.random() * 9000);
-            const agora = new Date();
-            document.getElementById('inputID').value = id;
-            document.getElementById('inputData').value = agora.toLocaleDateString('pt-PT');
-            document.getElementById('inputHora').value = agora.toLocaleTimeString('pt-PT', {hour: '2-digit', minute:'2-digit'});
+        function preencherCamposAutomaticos() {
+            const protocolo = "PI-" + Math.floor(1000 + Math.random() * 9000);
+            const hoje = new Date().toLocaleDateString('pt-BR');
+            
+            document.getElementById('formProtocolo').value = protocolo;
+            document.getElementById('formData').value = hoje;
         }
 
-        // Gráfico 1: Status (Donut)
-        const ctxS = document.getElementById('statusChart').getContext('2d');
-        new Chart(ctxS, {
-            type: 'doughnut',
-            data: {
-                labels: ['Resolvidas', 'Análise', 'Pendentes'],
-                datasets: [{
-                    data: [18, 4, 2],
-                    backgroundColor: ['#22c55e', '#eab308', '#ef4444'],
-                    borderWidth: 0
-                }]
-            },
-            options: { cutout: '75%', plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } } } }
-        });
-
-        // Gráfico 2: Barras Mensal
-        const ctxB = document.getElementById('barChart').getContext('2d');
-        new Chart(ctxB, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-                datasets: [{
-                    label: 'Registros',
-                    data: [4, 7, 3, 5, 8, 2],
-                    backgroundColor: '#0095ff',
-                    borderRadius: 8
-                }]
-            },
-            options: { scales: { y: { grid: { display: false } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
-        });
-
-        // Envio do formulário
-        document.getElementById('formOcorrencia').addEventListener('submit', function(e) {
+        document.getElementById('ocorrenciaForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert("Sucesso! Ocorrência " + document.getElementById('inputID').value + " registrada.");
-            showSection('inicio');
+            
+            const tableBody = document.getElementById('historicoTableBody');
+            const row = `
+                <tr class="animate__animated animate__fadeInLeft">
+                    <td>${document.getElementById('formProtocolo').value}</td>
+                    <td>${document.getElementById('formData').value}</td>
+                    <td>${document.getElementById('formEspaco').value}</td>
+                    <td>${document.getElementById('formTipo').value}</td>
+                    <td><span class="status-badge badge-pendente">Pendente</span></td>
+                </tr>
+            `;
+            
+            tableBody.innerHTML = row + tableBody.innerHTML;
+            
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "✓ Enviado com Sucesso!";
+            btn.style.background = "#4ade80";
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.background = "linear-gradient(135deg, #ffd369, #ffb703)";
+                this.reset();
+                showSection('historico', document.querySelector('.nav-item:nth-child(2)'));
+            }, 1500);
         });
+
+        function initChart() {
+            const ctx = document.getElementById('usageChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    datasets: [{
+                        label: 'Visitantes Gerais',
+                        data: [400, 550, 480, 600, 850, 1200, 1100],
+                        borderColor: '#ffd369',
+                        backgroundColor: 'rgba(255, 211, 105, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        window.onload = initChart;
     </script>
 </body>
 </html>
