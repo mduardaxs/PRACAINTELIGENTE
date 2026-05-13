@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Cadastro | Praça Inteligente</title>
+  <title>Login | Praça Inteligente</title>
 
   <!-- Favicon -->
   <link rel="icon" type="image/png"
@@ -13,7 +13,7 @@
 
   <!-- Animate.css -->
   <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
   <style>
 
@@ -25,26 +25,26 @@
 
     body{
       min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+      overflow:hidden;
       font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background:
       radial-gradient(circle at top left, #1b6ca8 0%, transparent 30%),
       radial-gradient(circle at bottom right, #0f4c75 0%, transparent 30%),
       linear-gradient(135deg, #071e3d, #0f4c75);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      padding:40px 20px;
       color:white;
-      overflow-x:hidden;
     }
 
-    /* FUNDO DECORATIVO */
+    /* FUNDO */
 
     body::before{
       content:"";
       position:absolute;
-      width:450px;
-      height:450px;
+      width:420px;
+      height:420px;
       background:rgba(255,211,105,0.08);
       border-radius:50%;
       top:-120px;
@@ -55,8 +55,8 @@
     body::after{
       content:"";
       position:absolute;
-      width:350px;
-      height:350px;
+      width:300px;
+      height:300px;
       background:rgba(255,255,255,0.05);
       border-radius:50%;
       bottom:-100px;
@@ -66,12 +66,12 @@
 
     /* CARD */
 
-    .cadastro-container{
+    .login-container{
       position:relative;
       z-index:2;
       width:100%;
-      max-width:450px;
-      padding:45px 35px;
+      max-width:430px;
+      padding:40px 32px;
       border-radius:28px;
       background:rgba(255,255,255,0.08);
       backdrop-filter:blur(14px);
@@ -85,11 +85,11 @@
 
     .logo{
       text-align:center;
-      margin-bottom:25px;
+      margin-bottom:30px;
     }
 
     .logo img{
-      width:80px;
+      width:75px;
       margin-bottom:15px;
     }
 
@@ -100,15 +100,12 @@
 
     .logo p{
       margin-top:10px;
-      color:rgba(255,255,255,0.8);
       line-height:1.7;
+      color:rgba(255,255,255,0.8);
+      font-size:0.95rem;
     }
 
-    /* FORM */
-
-    form{
-      margin-top:30px;
-    }
+    /* INPUTS */
 
     .input-group{
       margin-bottom:20px;
@@ -117,8 +114,8 @@
     .input-group label{
       display:block;
       margin-bottom:10px;
-      font-weight:600;
       color:#ffd369;
+      font-weight:600;
     }
 
     .input-group input{
@@ -130,7 +127,7 @@
       background:rgba(255,255,255,0.07);
       border:1px solid rgba(255,255,255,0.08);
       color:white;
-      font-size:1rem;
+      font-size:0.95rem;
       transition:0.3s ease;
     }
 
@@ -175,15 +172,16 @@
     .btn{
       width:100%;
       margin-top:10px;
-      padding:18px;
+      padding:16px;
       border:none;
       border-radius:16px;
-      background:
-      linear-gradient(135deg,#ffd369,#ffb703);
-      color:#111;
+      cursor:pointer;
       font-size:1rem;
       font-weight:700;
-      cursor:pointer;
+      color:#111;
+
+      background:
+      linear-gradient(135deg,#ffd369,#ffb703);
       transition:0.4s ease;
       box-shadow:
       0 10px 30px rgba(255,211,105,0.25);
@@ -201,7 +199,6 @@
       margin-top:25px;
       text-align:center;
       color:rgba(255,255,255,0.7);
-      line-height:1.7;
       font-size:0.95rem;
     }
 
@@ -215,52 +212,29 @@
       text-decoration:underline;
     }
 
-    /* RESPONSIVO */
-
-    @media(max-width:600px){
-
-      .cadastro-container{
-        padding:35px 25px;
-      }
-
-      .logo h1{
-        font-size:1.8rem;
-      }
-    }
   </style>
 </head>
-
 <body>
-  <div class="cadastro-container animate__animated animate__fadeInUp">
+
+  <div class="login-container animate__animated animate__fadeInUp">
     <div class="logo">
       <img src="https://i.ibb.co/Nz68BSC/PRA-A-INTELIGENTE-LOGO.png"
         alt="Logo Praça Inteligente">
-      <h1>Praça Inteligente</h1>
+      <h1>Login</h1>
       <p>
-        Faça seu cadastro e participe da construção
-        de cidades mais inteligentes, sustentáveis
-        e conectadas.
+        Entre na plataforma e acompanhe
+        os espaços públicos inteligentes.
       </p>
     </div>
 
-    <form>
-      <div class="input-group">
-        <label>Nome Completo</label>
-
-        <input type="text"
-          placeholder="Digite seu nome completo">
-      </div>
-
+    <form id="loginForm">
       <div class="input-group">
         <label>E-mail</label>
-        <input type="email"
-          placeholder="Digite seu e-mail">
-      </div>
-
-      <div class="input-group">
-        <label>CPF</label>
-        <input type="text"
-          placeholder="000.000.000-00">
+        <input 
+          type="email"
+          id="email"
+          placeholder="Digite seu e-mail"
+          required>
       </div>
 
       <div class="input-group">
@@ -269,36 +243,69 @@
           <input 
             type="password"
             id="senha"
-            placeholder="Crie sua senha">
+            placeholder="Digite sua senha"
+            required>
           <span class="toggle-password" onclick="mostrarSenha()">
             👁
           </span>
         </div>
       </div>
 
-      <button class="btn">
-        Criar Cadastro
+      <button type="submit" class="btn">
+        Entrar
       </button>
-
     </form>
+
     <div class="footer-text">
-      Já possui uma conta?
-      <a href="login.html">
-        Entrar agora
+      Não possui conta?
+      <a href="cadastro.html">
+        Cadastre-se
       </a>
     </div>
   </div>
-
   <script>
+
+    // MOSTRAR SENHA
+
     function mostrarSenha(){
       const senhaInput = document.getElementById("senha");
       if(senhaInput.type === "password"){
         senhaInput.type = "text";
-
       } else {
         senhaInput.type = "password";
       }
     }
+
+    // LOGIN E REDIRECIONAMENTO
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", function(event){
+
+      event.preventDefault();
+
+      const email = document
+        .getElementById("email")
+        .value;
+
+      // ADMIN
+
+      if(email.endsWith("@pracainteligente.com")){
+        window.location.href = "admin.html";
+      }
+
+      // CIDADÃO
+
+      else if(email.endsWith("@gmail.com")){
+        window.location.href = "cidadao.html";
+      }
+
+      // EMAIL INVÁLIDO
+
+      else{
+        alert("E-mail não autorizado.");
+      }
+    });
   </script>
 </body>
 </html>
